@@ -1,0 +1,27 @@
+:root {
+  --green: #6aaa64;
+  --yellow: #c9b458;
+  --dark-grey: #333;
+  --light-grey: #555;
+}
+
+.green {
+  background-color: var(--green);
+  border-color: var(--green);
+}
+
+.yellow {
+  background-color: var(--yellow);
+  border-color: var(--yellow);
+}
+
+.dark-grey {
+  background-color: var(--dark-grey);
+  border-color: var(--dark-grey);
+}
+
+.light-grey {
+  background-color: var(--light-grey);
+  border-color: var(--light-grey);
+}
+
