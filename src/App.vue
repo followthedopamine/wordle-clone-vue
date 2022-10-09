@@ -58,8 +58,11 @@ const submitWord = (word) => {
         guessedLetters.push([grid.value[currentRow][j].char, cLevel.yellow]);
       } else {
         guessedLetters.push([grid.value[currentRow][j].char, cLevel.incorrect]);
+        grid.value[currentRow][remainingGuess[j][1]].correctness =
+          cLevel.incorrect;
       }
     }
+    console.log(guessedLetters);
     keyboard.value = updateKeyboardBackgrounds();
     currentRow++;
     currentCol = 0;
@@ -134,6 +137,19 @@ const handleKeyboard = (event) => {
   forceRerender();
 };
 
+const handleClicks = (event) => {
+  if (event.target.classList.contains("keyboard-key")) {
+    const letter = event.target.innerHTML.toLowerCase();
+    if (letter === "enter") {
+      submitWord(grid.value[currentRow]);
+    } else if (letter === "&lt;") {
+      deleteLastCharFromGrid();
+    } else {
+      inputCharToGrid(letter);
+    }
+  }
+};
+
 const componentKey = ref(0);
 
 const forceRerender = () => {
@@ -150,6 +166,7 @@ const winningWord = "kappa";
 let currentRow = 0;
 let currentCol = 0;
 document.body.addEventListener("keydown", handleKeyboard);
+document.body.addEventListener("click", handleClicks);
 </script>
 
 <template>

@@ -15,6 +15,9 @@ if (props.data.correctness === cLevel.correct) {
 if (props.data.correctness === cLevel.yellow) {
   className = "yellow";
 }
+if (props.data.correctness === cLevel.incorrect) {
+  className = "dark-grey";
+}
 </script>
 
 <template>

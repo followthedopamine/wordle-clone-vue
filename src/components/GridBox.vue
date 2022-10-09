@@ -13,13 +13,16 @@ if (props.data.correctness === cLevel.correct) {
 if (props.data.correctness === cLevel.yellow) {
   className = "yellow";
 }
+if (props.data.correctness === cLevel.incorrect) {
+  className = "dark-grey";
+}
 if (props.data.correctness === cLevel.error) {
   className = "error";
 }
 </script>
 
 <template>
-  <span :class="className">{{ props.data.char.toUpperCase() }}</span>
+  <span :class="className">{{ props.data.char.toUpperCase() }} </span>
 </template>
 
 <style scoped>
