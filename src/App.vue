@@ -34,9 +34,10 @@ const deleteLastCharFromGrid = () => {
 };
 
 const submitWord = (word) => {
+  const wordJoined = joinRow(grid.value[currentRow]);
   if (
     currentCol === grid.value[currentRow].length &&
-    wordList.indexOf(joinRow(grid.value[currentRow])) > -1
+    wordList.indexOf(wordJoined) > -1
   ) {
     const remainingGuess = [];
     const remainingWord = [];
@@ -61,6 +62,9 @@ const submitWord = (word) => {
         grid.value[currentRow][remainingGuess[j][1]].correctness =
           cLevel.incorrect;
       }
+    }
+    if (wordJoined === winningWord) {
+      win();
     }
     console.log(guessedLetters);
     keyboard.value = updateKeyboardBackgrounds();
@@ -122,6 +126,21 @@ const playErrorAnimation = () => {
   }, 300);
 };
 
+const win = () => {
+  const messages = [
+    "Epic!",
+    "Impressive",
+    "Nice",
+    "Good job",
+    "Close one",
+    "Phew!",
+    ":( the word was: " + winningWord,
+  ];
+  popupText.value = messages[currentRow];
+  document.body.removeEventListener("keydown", handleKeyboard);
+  document.body.removeEventListener("click", handleClicks);
+};
+
 const handleKeyboard = (event) => {
   console.log(event.key);
   if (event.key === "Enter") {
@@ -163,6 +182,7 @@ const grid = ref(createGrid(gridSize));
 const guessedLetters = [];
 let keyboard = ref(updateKeyboardBackgrounds());
 const winningWord = "kappa";
+const popupText = ref("");
 let currentRow = 0;
 let currentCol = 0;
 document.body.addEventListener("keydown", handleKeyboard);
@@ -172,6 +192,7 @@ document.body.addEventListener("click", handleClicks);
 <template>
   <div class="container" :key="componentKey">
     <div class="grid">
+      <div id="popup" v-if="popupText">{{ popupText }}</div>
       <div>
         <div
           class="row"
@@ -235,5 +256,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#popup {
+  position: absolute;
+  background: #bbb;
+  font-size: 16px;
+  color: #111;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 2px 4px rgba(0, 0, 0, 0.5);
 }
 </style>
