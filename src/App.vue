@@ -34,6 +34,7 @@ const deleteLastCharFromGrid = () => {
 };
 
 const submitWord = (word) => {
+  // Duplicate letters showing both as yellow
   const wordJoined = joinRow(grid.value[currentRow]);
   if (
     currentCol === grid.value[currentRow].length &&
@@ -52,21 +53,25 @@ const submitWord = (word) => {
         remainingGuess.push([guessChar, i]);
       }
     }
-    for (let j = 0; j < remainingGuess.length; j++) {
-      if (remainingWord.indexOf(remainingGuess[j][0]) > -1) {
-        grid.value[currentRow][remainingGuess[j][1]].correctness =
+    while (remainingWord.length > 0) {
+      if (remainingWord.indexOf(remainingGuess[0][0]) > -1) {
+        grid.value[currentRow][remainingGuess[0][1]].correctness =
           cLevel.yellow;
-        guessedLetters.push([grid.value[currentRow][j].char, cLevel.yellow]);
+        guessedLetters.push([grid.value[currentRow][0].char, cLevel.yellow]);
       } else {
-        guessedLetters.push([grid.value[currentRow][j].char, cLevel.incorrect]);
-        grid.value[currentRow][remainingGuess[j][1]].correctness =
+        guessedLetters.push([grid.value[currentRow][0].char, cLevel.incorrect]);
+        grid.value[currentRow][remainingGuess[0][1]].correctness =
           cLevel.incorrect;
       }
+      remainingWord.shift();
+      remainingGuess.shift();
     }
     if (wordJoined === winningWord) {
       win();
     }
-    console.log(guessedLetters);
+    if (currentRow === numberOfGuesses - 1) {
+      lose();
+    }
     keyboard.value = updateKeyboardBackgrounds();
     currentRow++;
     currentCol = 0;
@@ -76,6 +81,8 @@ const submitWord = (word) => {
 };
 
 const updateKeyboardBackgrounds = () => {
+  // Something wrong here: stays as yellow even after getting them green
+  // Some keys are just the straight up wrong colour (if you guess them twice)?
   let keyboard = [
     ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
     ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
@@ -126,7 +133,13 @@ const playErrorAnimation = () => {
   }, 300);
 };
 
+const unhook = () => {
+  document.body.removeEventListener("keydown", handleKeyboard);
+  document.body.removeEventListener("click", handleClicks);
+};
+
 const win = () => {
+  // Need a losing condition
   const messages = [
     "Epic!",
     "Impressive",
@@ -134,11 +147,14 @@ const win = () => {
     "Good job",
     "Close one",
     "Phew!",
-    ":( the word was: " + winningWord,
   ];
   popupText.value = messages[currentRow];
-  document.body.removeEventListener("keydown", handleKeyboard);
-  document.body.removeEventListener("click", handleClicks);
+  unhook();
+};
+
+const lose = () => {
+  popupText.value = ":( the word was: " + winningWord;
+  unhook();
 };
 
 const handleKeyboard = (event) => {
@@ -181,7 +197,7 @@ const gridSize = [numberOfGuesses, wordLength];
 const grid = ref(createGrid(gridSize));
 const guessedLetters = [];
 let keyboard = ref(updateKeyboardBackgrounds());
-const winningWord = "kappa";
+const winningWord = "blash"; //wordList[~~(Math.random() * wordList.length)];
 const popupText = ref("");
 let currentRow = 0;
 let currentCol = 0;
