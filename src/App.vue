@@ -1,8 +1,10 @@
 <script setup>
+// Would love to add difficulty settings / larger | smaller word lengths
 import GridBox from "./components/GridBox.vue";
 import KeyboardKey from "./components/KeyboardKey.vue";
 import { ref } from "vue";
 import { wordList } from "./assets/words5";
+import { wordListAnswers } from "./assets/words5answers";
 const cLevel = require("./utils/cLevel");
 
 const createGrid = ([rows, cols]) => {
@@ -148,7 +150,6 @@ const unhook = () => {
 };
 
 const win = () => {
-  // Need a losing condition
   const messages = [
     "Epic!",
     "Impressive",
@@ -206,7 +207,7 @@ const gridSize = [numberOfGuesses, wordLength];
 const grid = ref(createGrid(gridSize));
 const guessedLetters = [];
 let keyboard = ref(updateKeyboardBackgrounds());
-const winningWord = wordList[~~(Math.random() * wordList.length)];
+const winningWord = wordListAnswers[~~(Math.random() * wordListAnswers.length)];
 const popupText = ref("");
 let currentRow = 0;
 let currentCol = 0;
