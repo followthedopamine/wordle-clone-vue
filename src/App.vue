@@ -34,7 +34,6 @@ const deleteLastCharFromGrid = () => {
 };
 
 const submitWord = (word) => {
-  // Duplicate letters showing both as yellow
   const wordJoined = joinRow(grid.value[currentRow]);
   if (
     currentCol === grid.value[currentRow].length &&
@@ -68,10 +67,12 @@ const submitWord = (word) => {
     }
     if (wordJoined === winningWord) {
       win();
+    } else {
+      if (currentRow === numberOfGuesses - 1) {
+        lose();
+      }
     }
-    if (currentRow === numberOfGuesses - 1) {
-      lose();
-    }
+
     keyboard.value = updateKeyboardBackgrounds();
     currentRow++;
     currentCol = 0;
