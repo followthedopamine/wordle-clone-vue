@@ -52,13 +52,14 @@ const submitWord = (word) => {
         remainingGuess.push([guessChar, i]);
       }
     }
+    let count = 0;
     while (remainingWord.length > 0) {
       if (remainingWord.indexOf(remainingGuess[0][0]) > -1) {
         grid.value[currentRow][remainingGuess[0][1]].correctness =
           cLevel.yellow;
-        guessedLetters.push([grid.value[currentRow][0].char, cLevel.yellow]);
+        guessedLetters.push([remainingGuess[0][0], cLevel.yellow]);
       } else {
-        guessedLetters.push([grid.value[currentRow][0].char, cLevel.incorrect]);
+        guessedLetters.push([remainingGuess[0][0], cLevel.incorrect]);
         grid.value[currentRow][remainingGuess[0][1]].correctness =
           cLevel.incorrect;
       }
@@ -82,18 +83,25 @@ const submitWord = (word) => {
 };
 
 const updateKeyboardBackgrounds = () => {
-  // Something wrong here: stays as yellow even after getting them green
-  // Some keys are just the straight up wrong colour (if you guess them twice)?
   let keyboard = [
     ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
     ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
     ["enter", "z", "x", "c", "v", "b", "n", "m", "<"],
   ];
 
-  const letters = guessedLetters.map(([letter, correctness]) => letter);
-  const correctnesses = guessedLetters.map(
+  const guessedLettersSorted = guessedLetters.sort(
+    ([letter, a], [letterb, b]) => b - a
+  );
+
+  console.log({ guessedLetters });
+  console.log({ guessedLettersSorted });
+
+  const letters = guessedLettersSorted.map(([letter, correctness]) => letter);
+  const correctnesses = guessedLettersSorted.map(
     ([letter, correctness]) => correctness
   );
+  console.log(guessedLettersSorted);
+  console.log(letters);
 
   for (let row = 0; row < keyboard.length; row++) {
     for (let col = 0; col < keyboard[row].length; col++) {
